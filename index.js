@@ -72,7 +72,7 @@ client.on('interactionCreate', (interaction) => {
 });
 
 // Express
-app.all('*', (res) => {
+app.all('*', (req, res) => {
   res.status(200).json({
     status: 'success',
     message: 'Sorry, Value studios have no website for now',
