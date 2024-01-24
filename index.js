@@ -5,7 +5,11 @@ const errorSystem = require('./systems/errorSystem.js');
 const announceSystem = require('./systems/announceSystem.js');
 const commandSystem = require('./systems/commandSystem.js');
 const mongoose = require('mongoose');
+const express = require('express');
 
+const app = express();
+
+// DB
 mongoose
   .connect(process.env.DB_URL)
   .then(() => {
@@ -17,6 +21,7 @@ mongoose
     console.log(e.stack);
   });
 
+// Handles
 client.on('ready', async () => {
   console.log(`Bot is logged in as: ${client.user.tag} | ${client.user.id}`);
 });
@@ -64,4 +69,16 @@ client.on('interactionCreate', (interaction) => {
       ephemeral: true,
       content: reply || 'شكرا!',
     });
+});
+
+// Express
+app.all('*', (res) => {
+  res.status(200).json({
+    status: 'success',
+    message: 'Sorry, Value studios have no website for now',
+  });
+});
+
+app.listen(process.env.PORT, () => {
+  console.log(`App is running on port ${process.env.PORT}`);
 });
