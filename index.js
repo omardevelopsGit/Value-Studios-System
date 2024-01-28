@@ -3,6 +3,7 @@ const client = require('./utils/discordClient.js');
 const ticketSystem = require('./systems/ticketSystem.js');
 const errorSystem = require('./systems/errorSystem.js');
 const announceSystem = require('./systems/announceSystem.js');
+const joinToCreateSystem = require('./systems/joinToCreateSystem.js');
 const commandSystem = require('./systems/commandSystem.js');
 const mongoose = require('mongoose');
 const express = require('express');
