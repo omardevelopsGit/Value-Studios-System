@@ -7,18 +7,18 @@ const ticket = '1145704443858391161';
 
 module.exports = {
   data: new SlashCommandBuilder()
-    .setName('grant')
+    .setName('ungrant')
     .setDescription(
-      'إضافة رتبه للشخص، لا تضاف أي رتبه خارجه عن وظيفتك كـ مدير تذاكر، أو كــ مسؤول إداره،  خاص بــ مدير التذاكر، ومسؤول الإداره'
+      'إضافة رتبه للشخص، لا تسلب أي رتبه خارجه عن وظيفتك كـ مدير تذاكر، أو كــ مسؤول إداره،  خاص بــ مدير التذاكر، ومسؤول الإداره'
     )
     .addUserOption((option) =>
       option
         .setName('member')
-        .setDescription('الشخص معطى الرتبه')
+        .setDescription('الشخص مسلوب الرتبه')
         .setRequired(true)
     )
     .addRoleOption((option) =>
-      option.setName('role').setDescription('الرتبه المعطاه').setRequired(true)
+      option.setName('role').setDescription('الرتبه المسلوبه').setRequired(true)
     ),
 
   async execute(interaction) {
@@ -29,20 +29,20 @@ module.exports = {
     function rep() {
       interaction.reply({
         ephemeral: true,
-        content: 'تمت إضافة الرتبه',
+        content: 'تمت إزالة الرتبه',
       });
     }
     if (
       executer.roles.cache.some((role) => role.id === mod) &&
       allowedToAddRoles_mod.includes(role.id)
     ) {
-      member.roles.add(role);
+      member.roles.remove(role);
       return rep();
     } else if (
       executer.roles.cache.some((role) => role.id === ticket) &&
       allowedToAddRoles_ticket.includes(role.id)
     ) {
-      member.roles.add(role);
+      member.roles.remove(role);
       return rep(); // I know that this code is not compatble with DRY, but I don't feel safe to put them together
     } else {
       return interaction.reply({
