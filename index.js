@@ -10,13 +10,6 @@ const express = require('express');
 
 const app = express();
 
-// Keeping the web service up
-setInterval(async () => {
-  try {
-    await fetch(process.env.LIVE_API);
-  } catch (e) {}
-}, 60000 * 3);
-
 // DB
 mongoose
   .connect(process.env.DB_URL)
@@ -90,3 +83,10 @@ app.all('*', (req, res) => {
 app.listen(process.env.PORT, () => {
   console.log(`App is running on port ${process.env.PORT}`);
 });
+
+// Keeping the web service up
+setInterval(async () => {
+  try {
+    fetch(process.env.LIVE_API);
+  } catch (e) {}
+}, 60000 * 3);
