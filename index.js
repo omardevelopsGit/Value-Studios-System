@@ -1,3 +1,14 @@
+// Handler
+process.on('uncaughtException', (e) => {
+  console.log('UNCAUGHT  EXCEPTION');
+  console.log(e);
+});
+
+process.on('unhandledRejection', (e) => {
+  console.log('UNCAUGHT  REJECTION');
+  console.log(e);
+});
+
 require('dotenv').config();
 const client = require('./utils/discordClient.js');
 const ticketSystem = require('./systems/ticketSystem.js');
@@ -85,8 +96,8 @@ app.listen(process.env.PORT, () => {
 });
 
 // Keeping the web service up
-// setInterval(async () => {
-//   try {
-//     fetch(process.env.LIVE_API);
-//   } catch (e) {}
-// }, 60000 * 3);
+setInterval(async () => {
+  try {
+    fetch(process.env.LIVE_API);
+  } catch (e) {}
+}, 60000 * 3);
