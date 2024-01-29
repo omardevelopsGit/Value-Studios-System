@@ -10,6 +10,13 @@ const express = require('express');
 
 const app = express();
 
+// Keeping the web service up
+setInterval(async () => {
+  try {
+    await fetch(process.env.LIVE_API);
+  } catch (e) {}
+}, 60000 * 3);
+
 // DB
 mongoose
   .connect(process.env.DB_URL)
