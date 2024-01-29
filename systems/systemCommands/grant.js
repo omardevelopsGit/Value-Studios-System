@@ -8,9 +8,7 @@ const ticket = '1145704443858391161';
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('grant')
-    .setDescription(
-      'إضافة رتبه للشخص، لا تضاف أي رتبه خارجه عن وظيفتك كـ مدير تذاكر، أو كــ مسؤول إداره،  خاص بــ مدير التذاكر، ومسؤول الإداره'
-    )
+    .setDescription('خاص بــ مدير التذاكر، ومسؤول الإداره')
     .addUserOption((option) =>
       option
         .setName('member')
