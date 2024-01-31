@@ -2,7 +2,7 @@ const { EmbedBuilder } = require('discord.js');
 const Room = require('../models/roomsModel.js');
 const client = require('../utils/discordClient.js');
 const catchAsync = require('../utils/catchAsync.js');
-// const publicEventEmitter = require('../utils/multiEventEmitter.js');
+const processData = require('../utils/processData.js');
 
 let announceChannelId;
 let everyoneRole;
@@ -33,7 +33,7 @@ function buildMessage(title, content, message) {
 const fillChannelId = catchAsync(async () => {
   const room = await Room.findOne({ role: 'announce-system' });
   const guild = await client.guilds.fetch(process.env.GUILD);
-  everyoneRole = await guild.roles.fetch('1145096746297466931');
+  everyoneRole = await guild.roles.fetch(processData.get('everyoneRole'));
 
   if (room) announceChannelId = room.discordId;
   else announceChannelId = undefined;

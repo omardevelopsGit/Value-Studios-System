@@ -1,9 +1,10 @@
 const { SlashCommandBuilder } = require('discord.js');
+const processData = require('../../utils/processData.js');
 
-const allowedToAddRoles_ticket = ['1145704445158625360'];
-const allowedToAddRoles_mod = ['1145704434601570344', '1145704421615992922'];
-const mod = '1145704433087418419';
-const ticket = '1145704443858391161';
+const allowedToAddRoles_ticket = processData.get('allowedToAddRoles_ticket');
+const allowedToAddRoles_mod = processData.get('allowedToAddRoles_mod');
+const mod = processData.get('modeRoleId');
+const ticket = processData.get('ticketRoleId');
 
 module.exports = {
   data: new SlashCommandBuilder()

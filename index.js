@@ -2,6 +2,7 @@
 process.on('uncaughtException', (e) => {
   console.log('UNCAUGHT  EXCEPTION');
   console.log(e);
+  process.exit();
 });
 
 process.on('unhandledRejection', (e) => {
@@ -9,6 +10,29 @@ process.on('unhandledRejection', (e) => {
   console.log(e);
 });
 
+// Setting up process data
+const processData = require('./utils/processData.js');
+processData.set('joinToCreateRoom', '1201133233098735636');
+processData.set('ticketTypes', ['ban', 'mod', 'pro']);
+processData.set('allowedTicketRoles', [
+  '1145704443858391161',
+  '1145704445158625360',
+]);
+processData.set('everyoneRole', '1145096746297466931');
+processData.set('allowedToAddRoles_ticket', ['1145704445158625360']);
+processData.set('allowedToAddRoles_mod', [
+  '1145704434601570344',
+  '1145704421615992922',
+]);
+processData.set('allowedToRemoveRoles_ticket', ['1145704445158625360']);
+processData.set('allowedToRemoveRoles_mod', [
+  '1145704434601570344',
+  '1145704421615992922',
+]);
+processData.set('modRoleId', '1145704433087418419');
+processData.set('ticketRoleId', '1145704443858391161');
+
+// Requiring modules
 require('dotenv').config();
 const client = require('./utils/discordClient.js');
 const ticketSystem = require('./systems/ticketSystem.js');

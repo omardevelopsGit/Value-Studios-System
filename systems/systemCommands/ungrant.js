@@ -1,9 +1,12 @@
 const { SlashCommandBuilder } = require('discord.js');
+const processData = require('../../utils/processData.js');
 
-const allowedToAddRoles_ticket = ['1145704445158625360'];
-const allowedToAddRoles_mod = ['1145704434601570344', '1145704421615992922'];
-const mod = '1145704433087418419';
-const ticket = '1145704443858391161';
+const allowedToRemoveRoles_ticket = processData.get(
+  'allowedToRemoveRoles_ticket'
+);
+const allowedToRemoveRoles_mod = processData.get('allowedToRemoveRoles_mod');
+const mod = processData.get('modeRoleId');
+const ticket = processData.get('ticketRoleId');
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -32,13 +35,13 @@ module.exports = {
     }
     if (
       executer.roles.cache.some((role) => role.id === mod) &&
-      allowedToAddRoles_mod.includes(role.id)
+      allowedToRemoveRoles_mod.includes(role.id)
     ) {
       member.roles.remove(role);
       return rep();
     } else if (
       executer.roles.cache.some((role) => role.id === ticket) &&
-      allowedToAddRoles_ticket.includes(role.id)
+      allowedToRemoveRoles_ticket.includes(role.id)
     ) {
       member.roles.remove(role);
       return rep(); // I know that this code is not compatble with DRY, but I don't feel safe to put them together

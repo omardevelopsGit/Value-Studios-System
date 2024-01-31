@@ -1,6 +1,7 @@
 const catchAsync = require('../utils/catchAsync.js');
 const client = require('../utils/discordClient.js');
 const { ChannelType } = require('discord.js');
+const processData = require('../utils/processData.js');
 
 client.on(
   'voiceStateUpdate',
@@ -12,7 +13,7 @@ client.on(
     if (
       channel &&
       channel.members.size === 1 &&
-      channel.id === '1201133233098735636'
+      channel.id === processData.get('joinToCreateRoom')
     ) {
       const newChannel = await channel.guild.channels.create({
         name: 'CVC┊مجلس سوالف',

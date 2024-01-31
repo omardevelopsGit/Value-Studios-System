@@ -6,16 +6,16 @@ const {
   EmbedBuilder,
   ButtonStyle,
   ChannelType,
-  PermissionsBitField,
 } = require('discord.js');
 const crypto = require('crypto');
 const publicEventEmitter = require('../utils/multiEventEmitter.js');
+const processData = require('../utils/processData.js');
 const catchAsync = require('../utils/catchAsync.js');
 
 let ticketSystemChannelId;
 const ticketSystemCatsIds = [];
 let closedTicketSystemCatId;
-const ticketTypes = ['ban', 'mod', 'pro'];
+const ticketTypes = processData.get('ticketTypes');
 
 const fillChannelCategoryId = async () => {
   const room = await Room.findOne({ role: 'ticket-system' });
@@ -169,7 +169,7 @@ exports.createTicket = catchAsync(async (interaction, customId, client) => {
 
   const guild = await interaction.guild.fetch();
 
-  const allowedTicketRoles = ['1145704443858391161', '1145704445158625360'];
+  const allowedTicketRoles = processData.get('allowedTicketRoles');
 
   let channel;
   const ticketId = crypto.randomBytes(3).toString('base64').toLowerCase();
