@@ -31,6 +31,52 @@ processData.set('allowedToRemoveRoles_mod', [
 ]);
 processData.set('modRoleId', '1145704433087418419');
 processData.set('ticketRoleId', '1145704443858391161');
+processData.set('suggestionRoomId', '1198953606313934919');
+processData.set('checker', (inputString) => {
+  const words = [
+    // كل هذه الكلمات هنا لكي حذف من السيرفر في حال تم ارسالها
+    ' طيز ',
+    ' كس ',
+    ' زب ',
+    ' مكوه ',
+    ' مكوة ',
+    ' مكوته ',
+    ' نيك ',
+    ' مكوتها ',
+    'كس ام',
+    'كس اخت',
+    'نيك ام',
+    'نيك اخت',
+    'يلعن ربك',
+    'يلعن دينك',
+    'يلعن الكعبه',
+    'يلعن المصحف',
+    'يلعن الرسول',
+    'يلعن النبي',
+    'يلعن محمد',
+    ' بز ',
+    ' زبي ',
+    ' كسي ',
+    'تلحس زب',
+    'تلحسي زب',
+    'تلحسي طيز',
+    'تلحس طيز',
+    'تلحسي كس',
+    'تلحس كس',
+    'يلعن امك',
+    'يلعن ابوك',
+    'يلعن اختك',
+    'يلعن اخوك',
+  ]; // All of these words is here to be deleted if sent on the server
+
+  // Check if the string contains forbidden words
+  for (const word of words) {
+    if (inputString.includes(word)) {
+      return true;
+    }
+  }
+  return false;
+});
 
 // Requiring modules
 require('dotenv').config();
@@ -40,8 +86,10 @@ const errorSystem = require('./systems/errorSystem.js');
 const announceSystem = require('./systems/announceSystem.js');
 const joinToCreateSystem = require('./systems/joinToCreateSystem.js');
 const commandSystem = require('./systems/commandSystem.js');
+const suggestionSystem = require('./systems/suggestionSystem.js');
 const mongoose = require('mongoose');
 const express = require('express');
+const { EmbedBuilder } = require('discord.js');
 
 const app = express();
 
@@ -63,6 +111,27 @@ client.on('ready', async () => {
 });
 
 client.on('messageCreate', async (msg) => {
+  if (processData.get('checker')(msg.content)) {
+    const dm = await msg.author.createDM(true);
+    await dm.send({
+      embeds: [
+        new EmbedBuilder()
+          .setTitle('تم حذف رسالتك')
+          .setAuthor({
+            iconURL: msg.author.avatarURL(),
+            name: msg.author.displayName,
+          })
+          .setColor('Red').setDescription(`
+            تم حذف رسالتك\n
+            ${msg.content}\n
+            بسبب إحتوائها على كلمات نابيه\n
+        `),
+      ],
+    });
+
+    return await msg.delete();
+  }
+
   if (!msg.guild || msg.author.bot) return; // Ignore DM
 
   if (msg.content === '-ticket')
