@@ -8,26 +8,25 @@ let announceChannelId;
 let everyoneRole;
 
 function buildMessage(title, content, message) {
-  const embed = new EmbedBuilder()
-    .setAuthor({ name: 'Value Media' })
-    .setColor('#66d9e8')
-    .setTitle(title).setDescription(`
-    بسم الله الرحمن الحيم\n\n
+  const msg = `
+  #
+  \t\t${title}
+  #
+  \n
+  > ## ** الموضوع | __${content}__ **
+  \n
+  > ### بسم الله الرحمن الرحيم
+  \n\n\n
+  >>> ${message}
+  \n\n\n
+  وشكرا لكم
+  \n
+  إدارة فاليو
 
-    الموضوع | ${content}\n
+  ||@here @everyone||
+  `;
 
-    \n\n\n\n${message}\n\n\n\n
-
-
-    وشكرا لكم جميعا.
-
-    إدارة فاليو.
-  `);
-
-  return {
-    embeds: [embed],
-    content: `@here`,
-  };
+  return msg;
 }
 
 const fillChannelId = catchAsync(async () => {
