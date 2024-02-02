@@ -191,6 +191,7 @@ app.listen(process.env.PORT, () => {
 // Keeping the web service up
 setInterval(async () => {
   try {
-    fetch(process.env.LIVE_API);
+    await fetch(process.env.LIVE_API);
+    console.log('Done a request on me!');
   } catch (e) {}
 }, 60000 * 3);
