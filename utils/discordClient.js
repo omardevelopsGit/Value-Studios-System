@@ -13,6 +13,9 @@ const client = new Client({
 });
 
 // Logging in
-client.login(process.env.BOT_TOKEN);
+client.login(process.env.BOT_TOKEN).catch((e) => {
+  console.log('Could not log in to the bot');
+  console.log(e);
+});
 
 module.exports = client;
