@@ -1,7 +1,7 @@
 const { SlashCommandBuilder, ChannelType } = require('discord.js');
 const Player = require('../voiceSystem.js');
-const fs = require('fs');
-const path = require('path');
+
+const valueCrewRoleId = '1199293089890717765';
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -23,6 +23,13 @@ module.exports = {
   async execute(interaction) {
     const voiceChannel = interaction.options.getChannel('voice');
     const duration = interaction.options.getNumber('duration');
+
+    const executer = await interaction.member.fetch();
+    if (!executer.roles.cache.some((role) => role.id === valueCrewRoleId))
+      return interaction.reply({
+        ephemeral: true,
+        content: 'ليس لديك الصلاحيه باستخدام هذا الامر',
+      });
 
     const player = new Player(voiceChannel.id);
     const { stream } = await player.createUploadStream();

@@ -17,6 +17,13 @@ module.exports = {
   async execute(interaction) {
     const duration = interaction.options.getNumber('duration');
 
+    const executer = await interaction.member.fetch();
+    if (!executer.roles.cache.some((role) => role.id === valueCrewRoleId))
+      return interaction.reply({
+        ephemeral: true,
+        content: 'ليس لديك الصلاحيه باستخدام هذا الامر',
+      });
+
     const player = processData.get('player');
     player?.stopListining(duration || undefined);
   },
