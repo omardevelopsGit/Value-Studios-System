@@ -25,10 +25,14 @@ client.on(
       member.voice.setChannel(newChannel);
     }
 
+    const filteredOldChannelMembers = oldChannel.members.filter(
+      (member) => !member.user.bot
+    );
+
     if (
       oldChannel &&
       oldChannel.name.startsWith('CVC') &&
-      oldChannel.members.size < 1
+      filteredOldChannelMembers.size < 1
     ) {
       // It is Chat Voice Channel, and it is empty now
       await oldChannel.delete();

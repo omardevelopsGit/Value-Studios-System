@@ -87,17 +87,20 @@ const announceSystem = require('./systems/announceSystem.js');
 const joinToCreateSystem = require('./systems/joinToCreateSystem.js');
 const commandSystem = require('./systems/commandSystem.js');
 const suggestionSystem = require('./systems/suggestionSystem.js');
+const voiceSystem = require('./systems/voiceSystem.js');
 const mongoose = require('mongoose');
 const express = require('express');
 const { EmbedBuilder } = require('discord.js');
+const { joinVoiceChannel } = require('@discordjs/voice');
 
 const app = express();
 
 // DB
 mongoose
   .connect(process.env.DB_URL)
-  .then(() => {
+  .then((connection) => {
     console.log('Successfully connected to the database');
+    processData.set('db', connection);
   })
   .catch((e) => {
     console.log('Could not connect to the database');
@@ -108,6 +111,7 @@ mongoose
 // Handles
 client.on('ready', async () => {
   console.log(`Bot is logged in as: ${client.user.tag} | ${client.user.id}`);
+  const guild = await client.guilds.fetch(process.env.GUILD);
 });
 
 client.on('messageCreate', async (msg) => {
