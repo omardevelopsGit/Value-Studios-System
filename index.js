@@ -30,6 +30,7 @@ processData.set('allowedToRemoveRoles_mod', [
   '1145704421615992922',
 ]);
 processData.set('modRoleId', '1145704433087418419');
+processData.set('crewRoleId', '1199443998830514227');
 processData.set('ticketRoleId', '1145704443858391161');
 processData.set('suggestionRoomId', '1198953606313934919');
 processData.set('checker', (inputString) => {
@@ -85,13 +86,13 @@ const ticketSystem = require('./systems/ticketSystem.js');
 const errorSystem = require('./systems/errorSystem.js');
 const announceSystem = require('./systems/announceSystem.js');
 const joinToCreateSystem = require('./systems/joinToCreateSystem.js');
+const privateChatSystem = require('./systems/privateChatSystem.js');
 const commandSystem = require('./systems/commandSystem.js');
 const suggestionSystem = require('./systems/suggestionSystem.js');
 const voiceSystem = require('./systems/voiceSystem.js');
 const mongoose = require('mongoose');
 const express = require('express');
 const { EmbedBuilder } = require('discord.js');
-const { joinVoiceChannel } = require('@discordjs/voice');
 
 const app = express();
 
@@ -196,6 +197,6 @@ app.listen(process.env.PORT, () => {
 setInterval(async () => {
   try {
     await fetch(process.env.LIVE_API);
-    console.log('Done a request on me!');
+    // console.log('Done a request on me!');
   } catch (e) {}
 }, 60000 * 3);

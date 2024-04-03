@@ -58,7 +58,16 @@ client.on(
         content: `هذا الأمر غير موجود`,
       });
 
-    const { execute } = require(path.join(dirPath, command));
+    const { execute, allow } = require(path.join(dirPath, command));
+
+    if (allow) {
+      const executer = await interaction.member.fetch();
+      if (!executer.roles.cache.some((role) => allow.includes(role.id)))
+        return interaction.reply({
+          ephemeral: true,
+          content: 'ليس لديك الصلاحية استخدام هذا الامر',
+        });
+    }
 
     await execute(interaction);
   })
