@@ -112,7 +112,6 @@ mongoose
 // Handles
 client.on('ready', async () => {
   console.log(`Bot is logged in as: ${client.user.tag} | ${client.user.id}`);
-  const guild = await client.guilds.fetch(process.env.GUILD);
 });
 
 client.on('messageCreate', async (msg) => {
@@ -185,7 +184,7 @@ client.on('interactionCreate', (interaction) => {
 app.all('*', (req, res) => {
   res.status(200).json({
     status: 'success',
-    message: 'Sorry, Value studios have no website for now',
+    message: 'Sorry, Value Studios haves no website for now',
   });
 });
 

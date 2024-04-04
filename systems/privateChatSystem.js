@@ -8,9 +8,11 @@ const {
   Colors,
   ActionRowBuilder,
   ChannelType,
+  GuildChannel,
 } = require('discord.js');
 const catchAsync = require('../utils/catchAsync.js');
 const EventEmitter = require('events');
+const schedule = require('node-schedule');
 
 let privateChatClosedCategory;
 
@@ -126,6 +128,49 @@ client.on(
       components: [actionRow],
     });
 
+    // Cron job to close the channel after 10 hours
+    const job = schedule.scheduleJob(
+      new Date(Date.now() + 10000),
+      async function () {
+        // This will be executed 10 hours from the time that it was created
+        // Here I will delete the channel, remove all the permissions, mark it as closed in the database
+
+        // 1) Move channel to closed privates
+        const privateChatChannel = await interaction.guild.channels.fetch(
+          privateChatClosedCategory?.discordId?.trim()
+        );
+        channel.setParent(privateChatChannel);
+
+        // 2) Update in the db
+        const privateChat = await PrivateChat.findOne({
+          discordId: channel.id,
+        });
+        await privateChat.updateOne({
+          status: 'closed',
+          mod: 'ua',
+          $push:
+            privateChat.mod === 'ua'
+              ? {}
+              : {
+                  mods: {
+                    discordId: privateChat.mod,
+                    addedAt: Date.now(),
+                    operation: 'left',
+                  },
+                },
+          closedAt: Date.now(),
+        });
+
+        // 3) Remove all permissions
+        interaction.channel.permissionOverwrites.set([
+          {
+            id: interaction.guild.id,
+            deny: ['ViewChannel'],
+          },
+        ]);
+      }
+    );
+
     interaction.editReply({
       content: 'تم إنشاء الروم، يمكنك الذهاب اليه',
     });
@@ -149,13 +194,16 @@ client.on(
     await privateChat.updateOne({
       status: 'closed',
       mod: 'ua',
-      $push: {
-        mods: {
-          discordId: privateChat.mod,
-          addedAt: Date.now(),
-          operation: 'left',
-        },
-      },
+      $push:
+        privateChat.mod === 'ua'
+          ? {}
+          : {
+              mods: {
+                discordId: privateChat.mod,
+                addedAt: Date.now(),
+                operation: 'left',
+              },
+            },
       closedAt: Date.now(),
     });
 
@@ -177,6 +225,13 @@ client.on(
       });
 
     await interaction.channel.setParent(privateChatChannel);
+
+    interaction.channel.permissionOverwrites.set([
+      {
+        id: interaction.guild.id,
+        deny: ['ViewChannel'],
+      },
+    ]);
 
     interaction.editReply({
       content: 'تم إغلاق التذكره بنجاح',
