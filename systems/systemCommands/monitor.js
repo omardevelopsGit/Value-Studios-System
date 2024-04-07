@@ -1,7 +1,7 @@
 const { SlashCommandBuilder, ChannelType } = require('discord.js');
 const Player = require('../voiceSystem.js');
 
-const valueCrewRoleId = '1199293089890717765';
+const valueCrewRoleId = processData.get('crewRoleId');
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -21,6 +21,7 @@ module.exports = {
     }),
 
   async execute(interaction) {
+    await interaction.deferReply({ ephemeral: true });
     const voiceChannel = interaction.options.getChannel('voice');
     const duration = interaction.options.getNumber('duration');
 
@@ -42,5 +43,7 @@ module.exports = {
     player.on('ready', () => {
       player.createListeningStream(...args);
     });
+
+    interaction.editReply({ content: 'جار مراقبة الغرفه الصوتيه' });
   },
 };

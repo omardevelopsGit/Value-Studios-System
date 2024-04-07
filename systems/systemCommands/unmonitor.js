@@ -15,10 +15,15 @@ module.exports = {
     }),
 
   async execute(interaction) {
+    await interaction.deferReply({ ephemeral: true });
     const duration = interaction.options.getNumber('duration');
 
     const executer = await interaction.member.fetch();
-    if (!executer.roles.cache.some((role) => role.id === valueCrewRoleId))
+    if (
+      !executer.roles.cache.some(
+        (role) => role.id === processData.get('crewRoleId')
+      )
+    )
       return interaction.reply({
         ephemeral: true,
         content: 'ليس لديك الصلاحيه باستخدام هذا الامر',
@@ -26,5 +31,9 @@ module.exports = {
 
     const player = processData.get('player');
     player?.stopListining(duration || undefined);
+
+    interaction.editReply({
+      content: 'توقفت عملية مراقبة الغرفه الصوتيه وتم حفظها',
+    });
   },
 };
